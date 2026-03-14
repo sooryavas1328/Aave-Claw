@@ -1,0 +1,79 @@
+{
+  "name": "aave-claw",
+  "version": "0.1.0",
+  "description": "Monitor Aave DeFi positions, health factors, and yield opportunities across 12+ networks. Built in Rust for maximum performance.",
+  "author": "susanudgzf",
+  "repository": "https://github.com/susanudgzf/Aave-Claw",
+  "homepage": "https://github.com/susanudgzf/Aave-Claw",
+  "license": "MIT",
+  "tags": ["defi", "aave", "ethereum", "finance", "blockchain", "yield"],
+  "server": {
+    "type": "http",
+    "default_port": 7070,
+    "health_endpoint": "/health",
+    "manifest_endpoint": "/.well-known/skill.json",
+    "execute_endpoint": "/execute"
+  },
+  "tools": [
+    {
+      "name": "get_positions",
+      "description": "Get all Aave V3 supply/borrow positions and health factor for an Ethereum address.",
+      "parameters": {
+        "type": "object",
+        "required": ["address"],
+        "properties": {
+          "address": {
+            "type": "string",
+            "description": "Ethereum wallet address (0x...)"
+          }
+        }
+      },
+      "returns": {
+        "type": "object",
+        "description": "UserPosition object with health_factor, collateral, debt, supplied and borrowed assets"
+      }
+    },
+    {
+      "name": "get_yields",
+      "description": "Get current Aave yield (APY) opportunities sorted by liquidity.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "network": {
+            "type": "string",
+            "enum": ["ethereum", "polygon", "arbitrum", "base", "optimism", "avalanche"],
+            "default": "ethereum",
+            "description": "Blockchain network to query"
+          }
+        }
+      },
+      "returns": {
+        "type": "array",
+        "description": "List of YieldOpportunity objects with supply/borrow APYs and liquidity data"
+      }
+    },
+    {
+      "name": "check_health",
+      "description": "Check if a position's health factor is below a danger threshold.",
+      "parameters": {
+        "type": "object",
+        "required": ["address"],
+        "properties": {
+          "address": {
+            "type": "string",
+            "description": "Ethereum wallet address"
+          },
+          "threshold": {
+            "type": "number",
+            "default": 1.2,
+            "description": "Minimum safe health factor (liquidation happens at 1.0)"
+          }
+        }
+      },
+      "returns": {
+        "type": "object",
+        "description": "{ health_factor, threshold, at_risk: bool, status: 'SAFE'|'DANGER' }"
+      }
+    }
+  ]
+}

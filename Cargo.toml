@@ -1,0 +1,40 @@
+[package]
+name = "aave-claw"
+version = "0.1.0"
+edition = "2021"
+authors = ["susanudgzf"]
+description = "⚡ High-performance Aave DeFi bot — liquidation monitor, yield optimizer & position tracker. OpenClaw skill."
+license = "MIT"
+repository = "https://github.com/susanudgzf/Aave-Claw"
+keywords = ["aave", "defi", "ethereum", "liquidation", "bot"]
+categories = ["finance", "network-programming"]
+readme = "README.md"
+
+[[bin]]
+name = "aave-claw"
+path = "src/main.rs"
+
+[dependencies]
+tokio = { version = "1", features = ["full"] }
+reqwest = { version = "0.11", features = ["json", "rustls-tls"], default-features = false }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+ethers = { version = "2", features = ["rustls"] }
+dotenv = "0.15"
+clap = { version = "4", features = ["derive"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+colored = "2"
+anyhow = "1"
+chrono = { version = "0.4", features = ["serde"] }
+tokio-stream = "0.1"
+futures = "0.3"
+rust_decimal = { version = "1", features = ["serde-float"] }
+toml = "0.8"
+dirs = "5"
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+strip = true
